@@ -17,47 +17,53 @@ def check_tube(t):
             break
     return [isEmpty, i]
 
-start = [[1,1,2,2],[1,2,2,1],[0,0,0,0]]
-#start = [[1,2,2,2],[2,1,1,1],[0,0,0,0]]
+start1 = [[1,1,2,2],[1,2,2,1],[0,0,0,0]]
+start2 = [[1,2,3,3],[1,3,2,2],[3,2,1,1],[0,0,0,0]]
+
+start = [start2,[]]
+
 s_queue = deque()
 s_queue.append(start)
 searched = []
 while s_queue:
     s = s_queue.popleft()
-    if s not in searched:
-        if finished(s):
-            print("\nfound it:",s)
-            break
-        else: 
-            for tube in range(len(s)):
-                #print("\neach tube", s[tube])
-                [isTubeEmpty, i] = check_tube(s[tube])
+    if s[0] in searched: 
+        continue
 
-                if isTubeEmpty:
+    if finished(s[0]):
+        break
+  
+    for tube in range(len(s[0])):
+        [isTubeEmpty, i] = check_tube(s[0][tube])
+        if isTubeEmpty:
+            continue
+ 
+        for ot in range(len(s[0])):
+            if ot == tube:
+                continue
+            s_new = copy.deepcopy(s[0])
+            [isOtherTubeEmpty, j] = check_tube(s_new[ot])
+
+            if j==0:
+                continue
+
+            if isOtherTubeEmpty:
+                s_new[ot][3] = s_new[tube][i]
+                s_new[tube][i]=0
+            else:
+                if s[0][ot][j] == s[0][tube][i]:
+                    s_new[ot][j-1] = s_new[tube][i]
+                    s_new[tube][i]=0
+                else:
                     continue
+            s_queue.append([s_new,s[1]+[tube, ot]])
+    searched.append(s[0])
+    #print("length of deque", len(s_queue))
+print("Found it, length of searched", len(searched))
+print("Start:\t", start[0])
+print("Finish:\t", s[0])
+print("solutions:")
+for i in range(len(s[1])//2):
+    print("Move", i+1, ": from", s[1][i*2]+1, "to", s[1][i*2+1]+1)
 
-                for ot in range(len(s)):
-                    if ot == tube:
-                        continue
-                    #print("other tube:", s[ot])
-                    s_new = copy.deepcopy(s)
-
-                    [isOtherTubeEmpty, j] = check_tube(s[ot])
-
-                    if j==0:
-                        continue
-
-                    if isOtherTubeEmpty:
-                        s_new[ot][3] = s_new[tube][i]
-                        s_new[tube][i]=0
-                    else:
-                        if s[ot][j] == s[tube][i]:
-                            s_new[ot][j-1] = s_new[tube][i]
-                            s_new[tube][i]=0
-                        else:
-                            continue
-                    s_queue.append(s_new)
-    searched.append(s)
-    print("length of deque", len(s_queue))
-print("length of searched", len(searched))
 
