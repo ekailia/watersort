@@ -1,5 +1,7 @@
+#! /usr/bin/python3
 from collections import deque
-import copy
+#import copy
+from copy import deepcopy
 # https://www.jianshu.com/p/49a4baba4f57
 # https://www.guyuehome.com/14906
 # https://www.topmathgames.com/Sorting-Balls
@@ -16,6 +18,9 @@ def check_tube(t):
             return i 
     return 4 
 
+def encode_tubes(s):
+    return frozenset(sum(t[i]*(20**i) for i in range(4)) for t in s)
+
 start0 = [[1,1,2,2],[1,2,3,4],[1,2,3,3],[0,0,0,0]]
 start1 = [[1,1,2,2],[1,2,2,1],[0,0,0,0]]
 start2 = [[1,2,3,3],[1,3,2,2],[3,2,1,1],[0,0,0,0]]
@@ -26,9 +31,10 @@ tmg4 = [[1,2,3,2],[1,2,4,3],[4,1,1,3],[0,0,0,0],[0,0,0,0],[4,2,3,4]]
 tmg5 = [[0,1,2,1],[0,0,0,0],[0,3,3,3],[0,1,3,1],[0,2,2,2]]
 tmg6 = [[1,1,2,2],[0,0,0,0],[0,0,0,0],[3,1,4,2],[3,4,1,4],[3,2,4,3]]
 tmg7 = [[0,0,0,0],[1,2,2,3],[0,0,0,0],[1,4,1,4],[3,4,3,2],[4,3,1,2]]
+tmg8 = [[1,1,2,2],[2,3,4,4],[0,0,0,0],[3,1,1,4],[2,3,3,4],[0,0,0,0]]
 
-#start = [start3,[]]
-start = [tmg7, []]
+start = [start3,[]]
+#start = [tmg8,[]]
 nTube = len(start[0])
 
 s_queue = deque()
@@ -41,7 +47,7 @@ cnt_searched = 0
 while s_queue:
     s = s_queue.popleft()
 
-    if tuple(i for j in s[0] for i in j) in searched:
+    if encode_tubes(s[0]) in searched:
         continue
 
     if finished(s[0]):
@@ -49,21 +55,24 @@ while s_queue:
         break
   
     for tube in range(nTube):
-        i = check_tube(s[0][tube])
+        #i = check_tube(s[0][tube])
+        i = next((k for k, x in enumerate(s[0][tube]) if x), 4)
+
         if i == 4: continue
 
         for ot in range(nTube):
             if ot == tube or s[0][ot][0]!=0: continue
-            s_new = copy.deepcopy(s[0])
+            s_new = deepcopy(s[0])
             
-            j = check_tube(s_new[ot])
+            #j = check_tube(s_new[ot])
+            j = next((k for k, x in enumerate(s_new[ot]) if x), 4)
 
             if j==4 or s[0][ot][j]==s[0][tube][i]:
                 s_new[ot][j-1] = s_new[tube][i]
                 s_new[tube][i] = 0
                 s_queue.append([s_new, s[1]+[tube, ot]])
 
-    searched.add(tuple(i for j in s[0] for i in j))
+    searched.add(encode_tubes(s[0]))
 
     cnt_searched += 1
     if cnt_searched % 1000 == 0:
