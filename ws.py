@@ -9,19 +9,19 @@ start1 = [[1,1,2,2],[1,2,2,1],[0,0,0,0]]
 start2 = [[1,2,3,3],[1,3,2,2],[3,2,1,1],[0,0,0,0]]
 start3 = [[1,1,2,3],[1,4,5,6],[3,7,5,4],[8,5,5,2],[3,7,9,2],[8,1,9,7]
         ,[6,8,6,8],[7,9,9,6],[4,2,4,3],[0,0,0,0],[0,0,0,0]]
-tmg2 = [[1,2,3,1],[2,2,3,1],[0,0,0,0],[3,1,2,3],[0,0,0,0]]
-tmg3 = [[1,1,2,3],[2,2,1,2],[3,1,3,3],[0,0,0,0],[0,0,0,0]]
-tmg4 = [[1,2,3,2],[1,2,4,3],[4,1,1,3],[0,0,0,0],[0,0,0,0],[4,2,3,4]]
-tmg5 = [[0,1,2,1],[0,0,0,0],[0,3,3,3],[0,1,3,1],[0,2,2,2]]
 tmg6 = [[1,1,2,2],[0,0,0,0],[0,0,0,0],[3,1,4,2],[3,4,1,4],[3,2,4,3]]
 tmg7 = [[0,0,0,0],[1,2,2,3],[0,0,0,0],[1,4,1,4],[3,4,3,2],[4,3,1,2]]
 tmg8 = [[1,1,2,2],[2,3,4,4],[0,0,0,0],[3,1,1,4],[2,3,3,4],[0,0,0,0]]
 hw152 = [[1,2,3,4],[5,6,7,8],[8,9,1,6],[7,6,3,10],[5,11,1,4],[12,10,3,12],[4,2,11,1]
         ,[4,5,9,12],[11,9,2,8],[12,6,10,9],[10,5,7,7],[8,2,3,11],[0,0,0,0],[0,0,0,0]]
+hw153 = [[1,2,3,4],[5,3,4,6],[3,7,6,8],[2,2,2,3],[9,6,5,1],[9,4,7,9]
+        ,[8,5,5,7],[9,8,8,1],[1,7,4,6],[0,0,0,0],[0,0,0,0]]
+hw154 = [[1,2,3,4],[5,1,2,6],[4,7,2,8],[9,6,10,11],[5,2,8,7],[1,11,10,11],[5,8,10,12]
+        ,[4,10,4,9],[6,3,3,6],[11,12,8,5],[3,12,9,12],[9,1,7,7],[0,0,0,0],[0,0,0,0]]
 
 #start = [start3,[]]
 #start = [tmg8,[]]
-start = [hw152, []]
+start = [hw153, []]
 
 nTube = len(start[0])
 nColor = max(max(t) for t in start[0])
@@ -45,8 +45,7 @@ isFound = False
 while s_queue:
     s = s_queue.popleft()
 
-    s_code = frozenset(sum(t[i]*(nColor+2)**i for i in range(4)) for t in s[0])
-    if s_code in searched:
+    if frozenset(sum(t[i] * (nColor+2)**i for i in range(4)) for t in s[0]) in searched:
         continue
 
     if all(t.count(t[0]) == 4 for t in s[0]):   # ckeck if tubes have same colors each 
@@ -54,9 +53,9 @@ while s_queue:
         break
   
     for tube in range(nTube):
-        i = next((k for k, x in enumerate(s[0][tube]) if x), 4)  # pointer to next non-empty slot
+        pos = next((k for k, x in enumerate(s[0][tube]) if x), 4)  # pointer to next non-empty slot
 
-        if i == 4: 
+        if pos == 4: 
             continue                            # the tube is empty
 
         for ot in range(nTube):                 # ot stands for other_tube
@@ -65,19 +64,17 @@ while s_queue:
             
             s_new = deepcopy(s[0])
             
-            j = next((k for k, x in enumerate(s_new[ot]) if x), 4)
+            pos_ot = next((k for k, x in enumerate(s_new[ot]) if x), 4)
 
-            if j == 4 or s[0][ot][j] == s[0][tube][i]:              # to fill from tube to other tube, by one slot
-                s_new[ot][j-1] = s_new[tube][i]
-                s_new[tube][i] = 0
+            if pos_ot == 4 or s[0][ot][pos_ot] == s[0][tube][pos]: # to fill from tube to other tube, by one slot
+                s_new[ot][pos_ot-1], s_new[tube][pos] = s_new[tube][pos], 0
                 s_queue.append([s_new, s[1]+[tube, ot]])
 
-    s_code = frozenset(sum(t[i]*(nColor+2)**i for i in range(4)) for t in s[0])
-    searched.add(s_code)
+    searched.add(frozenset(sum(t[i] * (nColor+2)**i for i in range(4)) for t in s[0]))
     
     # to show progress
     if len(searched) % 1000 == 0:
-        print("length of deque:", len(s_queue), "\tlength of searched:", len(searched))
+        print("deque length:", len(s_queue), "\tnumber of states searched:", len(searched))
 
 if isFound:
     print("Found it, length of searched", len(searched))
@@ -85,7 +82,7 @@ if isFound:
     print("Finish:\t", s[0])
     print("Solutions:")
     for i in range(len(s[1])//2):
-        print("Move", i+1, ": from", s[1][i*2]+1, "to", s[1][i*2+1]+1)
+        print("Move", i+1, ": from", s[1][i*2]+1, "to", s[1][i*2+1]+1, "\n"*(i%5==4))
 else:
     print("No solution.")
     print("Lenghth of searched:", len(searched))
