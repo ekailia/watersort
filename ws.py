@@ -7,7 +7,8 @@ from copy import deepcopy
 
 start1 = [[1,1,2,2],[1,2,2,1],[0,0,0,0]]
 start2 = [[1,2,3,3],[1,3,2,2],[3,2,1,1],[0,0,0,0]]
-start3 = [[1,1,2,3],[1,4,5,6],[3,7,5,4],[8,5,5,2],[3,7,9,2],[8,1,9,7],[6,8,6,8],[7,9,9,6],[4,2,4,3],[0,0,0,0],[0,0,0,0]]
+start3 = [[1,1,2,3],[1,4,5,6],[3,7,5,4],[8,5,5,2],[3,7,9,2],[8,1,9,7]
+        ,[6,8,6,8],[7,9,9,6],[4,2,4,3],[0,0,0,0],[0,0,0,0]]
 tmg2 = [[1,2,3,1],[2,2,3,1],[0,0,0,0],[3,1,2,3],[0,0,0,0]]
 tmg3 = [[1,1,2,3],[2,2,1,2],[3,1,3,3],[0,0,0,0],[0,0,0,0]]
 tmg4 = [[1,2,3,2],[1,2,4,3],[4,1,1,3],[0,0,0,0],[0,0,0,0],[4,2,3,4]]
@@ -15,12 +16,25 @@ tmg5 = [[0,1,2,1],[0,0,0,0],[0,3,3,3],[0,1,3,1],[0,2,2,2]]
 tmg6 = [[1,1,2,2],[0,0,0,0],[0,0,0,0],[3,1,4,2],[3,4,1,4],[3,2,4,3]]
 tmg7 = [[0,0,0,0],[1,2,2,3],[0,0,0,0],[1,4,1,4],[3,4,3,2],[4,3,1,2]]
 tmg8 = [[1,1,2,2],[2,3,4,4],[0,0,0,0],[3,1,1,4],[2,3,3,4],[0,0,0,0]]
+hw152 = [[1,2,3,4],[5,6,7,8],[8,9,1,6],[7,6,3,10],[5,11,1,4],[12,10,3,12],[4,2,11,1]
+        ,[4,5,9,12],[11,9,2,8],[12,6,10,9],[10,5,7,7],[8,2,3,11],[0,0,0,0],[0,0,0,0]]
 
-start = [start3,[]]
+#start = [start3,[]]
 #start = [tmg8,[]]
+start = [hw152, []]
+
 nTube = len(start[0])
-nColor = max(max(t) for t in start[0]) + 2 
+nColor = max(max(t) for t in start[0])
 #nColor = 20
+
+valid = list(i for t in start[0] for i in t)
+
+if all(valid.count(valid[i]) % 4 == 0 for i in range(nColor+1)):
+    print("Validation OK")
+else:
+    print("Validation Failed")
+    print(list(valid.count(valid[i]) for i in range(nColor+1)))
+    exit()
 
 s_queue = deque()
 s_queue.append(start)
@@ -31,7 +45,7 @@ isFound = False
 while s_queue:
     s = s_queue.popleft()
 
-    s_code = frozenset(sum(t[i]*(nColor**i) for i in range(4)) for t in s[0])
+    s_code = frozenset(sum(t[i]*(nColor+2)**i for i in range(4)) for t in s[0])
     if s_code in searched:
         continue
 
@@ -58,7 +72,7 @@ while s_queue:
                 s_new[tube][i] = 0
                 s_queue.append([s_new, s[1]+[tube, ot]])
 
-    s_code = frozenset(sum(t[i]*(nColor**i) for i in range(4)) for t in s[0])
+    s_code = frozenset(sum(t[i]*(nColor+2)**i for i in range(4)) for t in s[0])
     searched.add(s_code)
     
     # to show progress
