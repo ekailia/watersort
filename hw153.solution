@@ -1,0 +1,53 @@
+Validation OK
+length of deque: 506 	length of searched: 1000
+length of deque: 810 	length of searched: 2000
+length of deque: 1179 	length of searched: 3000
+length of deque: 1614 	length of searched: 4000
+length of deque: 1928 	length of searched: 5000
+length of deque: 2339 	length of searched: 6000
+length of deque: 2484 	length of searched: 7000
+length of deque: 2627 	length of searched: 8000
+length of deque: 2846 	length of searched: 9000
+length of deque: 2943 	length of searched: 10000
+length of deque: 2729 	length of searched: 11000
+length of deque: 2580 	length of searched: 12000
+length of deque: 2691 	length of searched: 13000
+length of deque: 1922 	length of searched: 14000
+Found it, length of searched 14397
+Start:	 [[1, 2, 3, 4], [5, 3, 4, 6], [3, 7, 6, 8], [2, 2, 2, 3], [9, 6, 5, 1], [9, 4, 7, 9], [8, 5, 5, 7], [9, 8, 8, 1], [1, 7, 4, 6], [0, 0, 0, 0], [0, 0, 0, 0]]
+Finish:	 [[4, 4, 4, 4], [6, 6, 6, 6], [8, 8, 8, 8], [3, 3, 3, 3], [0, 0, 0, 0], [2, 2, 2, 2], [7, 7, 7, 7], [1, 1, 1, 1], [0, 0, 0, 0], [5, 5, 5, 5], [9, 9, 9, 9]]
+Solutions:
+Move 1 : from 2 to 10
+Move 2 : from 3 to 2
+Move 3 : from 5 to 11
+Move 4 : from 6 to 11
+Move 5 : from 8 to 11
+Move 6 : from 7 to 8
+Move 7 : from 7 to 10
+Move 8 : from 7 to 10
+Move 9 : from 3 to 7
+Move 10 : from 3 to 5
+Move 11 : from 8 to 3
+Move 12 : from 8 to 3
+Move 13 : from 8 to 3
+Move 14 : from 1 to 8
+Move 15 : from 9 to 8
+Move 16 : from 9 to 7
+Move 17 : from 6 to 9
+Move 18 : from 6 to 7
+Move 19 : from 6 to 11
+Move 20 : from 1 to 6
+Move 21 : from 4 to 6
+Move 22 : from 4 to 6
+Move 23 : from 4 to 6
+Move 24 : from 1 to 4
+Move 25 : from 2 to 4
+Move 26 : from 2 to 4
+Move 27 : from 2 to 1
+Move 28 : from 5 to 2
+Move 29 : from 5 to 2
+Move 30 : from 5 to 10
+Move 31 : from 5 to 8
+Move 32 : from 9 to 1
+Move 33 : from 9 to 1
+Move 34 : from 9 to 2
