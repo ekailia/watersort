@@ -51,7 +51,7 @@ if __name__ == "__main__":
         print("Validation OK")
     else:
         print("Validation Failed")
-        print(list(valid.count(valid[i]) for i in range(nColor+1)))
+        print(list((i, valid.count(i)) for i in range(nColor+1) if valid.count(i) % 4 !=0))
         exit()
 
     s_queue = deque()
